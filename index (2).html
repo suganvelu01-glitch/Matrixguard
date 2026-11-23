@@ -4,508 +4,366 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MatrixGuard - Secure Messaging</title>
+<title>MatrixGuard</title>
 
-<!-- QR Code Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <style>
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background: #08111f;
-    color: #e5eefc;
-    min-height: 100vh;
-}
-
-header {
-    text-align: center;
-    padding: 28px 15px;
-    background: #101d32;
-    border-bottom: 1px solid #263b59;
-}
-
-header h1 {
-    color: #38e6a0;
-    font-size: 32px;
-    margin-bottom: 8px;
-}
-
-header p {
-    color: #a9bad1;
+  margin: 0;
+  padding: 25px;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #101a35, #17466a);
+  color: white;
 }
 
 .container {
-    width: 92%;
-    max-width: 950px;
-    margin: 28px auto;
+  max-width: 850px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+h1 {
+  color: #38d9ff;
+  font-size: 38px;
 }
 
 .card {
-    background: #122139;
-    padding: 22px;
-    margin-bottom: 20px;
-    border-radius: 13px;
-    border: 1px solid #263e5e;
+  background: #ffffff12;
+  padding: 22px;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  border: 1px solid #ffffff30;
 }
 
 h2 {
-    color: #38e6a0;
-    font-size: 20px;
-    margin-bottom: 15px;
-}
-
-label {
-    display: block;
-    margin: 13px 0 8px;
-    color: #d5e4f7;
-}
-
-textarea, input {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #405875;
-    border-radius: 8px;
-    background: #081629;
-    color: white;
-    font-size: 16px;
-    outline: none;
+  color: #7de8ff;
 }
 
 textarea {
-    min-height: 95px;
-    resize: vertical;
-}
-
-textarea:focus, input:focus {
-    border-color: #38e6a0;
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  background: #07172c;
+  color: white;
+  border: 1px solid #54718c;
 }
 
 button {
-    padding: 12px 18px;
-    margin: 12px 6px 0 0;
-    border: none;
-    border-radius: 7px;
-    background: #20c989;
-    color: #061b17;
-    font-weight: bold;
-    cursor: pointer;
+  background: #38d9ff;
+  color: #06182c;
+  padding: 12px 18px;
+  margin: 10px 5px 0 0;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
 button:hover {
-    background: #54edb0;
-}
-
-.secondary {
-    background: #31557e;
-    color: white;
+  background: #91edff;
 }
 
 .output {
-    background: #071528;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #36516f;
-    min-height: 48px;
-    overflow-wrap: anywhere;
-    margin-top: 10px;
-    color: #58e9ad;
-    font-size: 17px;
-}
-
-.matrix-area {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 35px;
-    flex-wrap: wrap;
-    padding: 20px;
+  background: #07172c;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 8px;
+  min-height: 45px;
+  overflow-wrap: anywhere;
 }
 
 .matrix {
-    border-left: 3px solid #38e6a0;
-    border-right: 3px solid #38e6a0;
-    padding: 10px 20px;
-    text-align: center;
-    color: #65e8b4;
-    font-size: 21px;
-    line-height: 1.8;
+  font-size: 22px;
+  color: #ffdc79;
+  line-height: 1.7;
+  font-family: monospace;
 }
 
-.matrix-title {
-    text-align: center;
-    color: #a9bad1;
-    margin-bottom: 10px;
-}
-
-#qr {
-    display: flex;
-    justify-content: center;
-    margin: 20px auto;
-    padding: 10px;
-    background: white;
-    width: fit-content;
-    border-radius: 8px;
-}
-
-#qr:empty {
-    display: none;
+#qrcode {
+  display: inline-block;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 15px;
 }
 
 .status {
-    color: #58e9ad;
-    margin-top: 10px;
-    font-size: 14px;
+  color: #86efac;
 }
 
-footer {
-    text-align: center;
-    color: #8194ae;
-    padding: 25px;
-}
-
-@media(max-width:600px) {
-    header h1 {
-        font-size: 25px;
-    }
-    .card {
-        padding: 16px;
-    }
+.small {
+  color: #c6d6e8;
+  font-size: 13px;
+  line-height: 1.5;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1> MATRIXGUARD </h1>
-    <p>Matrix-Based Secure Message Encryption & QR Sharing System</p>
-</header>
-
 <div class="container">
 
-    <!-- ENCRYPTION -->
-    <section class="card">
-        <h2>01. Text Encryption</h2>
+<header>
+  <h1> MATRIXGUARD </h1>
+  <p>Matrix-Based Text Encryption and QR Sharing System</p>
+</header>
 
-        <label>Enter your original message</label>
-        <textarea id="plainText"
-        placeholder="Enter your message here..."></textarea>
+<div class="card">
+  <h2>1. Text Encryption</h2>
 
-        <button onclick="encryptMessage()">Encrypt Message</button>
+  <label>Enter Your Message</label>
+  <br><br>
 
-        <label>Encrypted Message</label>
-        <div class="output" id="encryptedOutput">
-            Your encrypted message will appear here.
-        </div>
+  <textarea id="plainText">HELLO</textarea>
 
-        <button class="secondary" onclick="copyEncrypted()">
-            Copy Encrypted Message
-        </button>
+  <button onclick="encryptMessage()">Encrypt Message</button>
 
-        <p class="status" id="encryptStatus"></p>
-    </section>
+  <h3>Encrypted Message</h3>
+  <div class="output" id="encryptedText">Result appears here</div>
 
-    <!-- DECRYPTION -->
-    <section class="card">
-        <h2>02. Text Decryption</h2>
+  <button onclick="copyMessage()">Copy Encrypted Data</button>
+  <p class="status" id="encryptStatus"></p>
+</div>
 
-        <label>Enter encrypted message</label>
-        <textarea id="cipherText"
-        placeholder="Paste your encrypted message here..."></textarea>
+<div class="card">
+  <h2>2. QR Code Sharing</h2>
 
-        <button onclick="decryptMessage()">Decrypt Message</button>
+  <p>Generate a QR code for the encrypted message.</p>
 
-        <label>Original Message</label>
-        <div class="output" id="decryptedOutput">
-            Your decrypted message will appear here.
-        </div>
+  <button onclick="generateQR()">Generate QR Code</button>
 
-        <p class="status" id="decryptStatus"></p>
-    </section>
+  <div id="qrcode"></div>
+</div>
 
-    <!-- QR CODE -->
-    <section class="card">
-        <h2>03. QR Code Sharing</h2>
+<div class="card">
+  <h2>3. Text Decryption</h2>
 
-        <p>Generate a QR code containing your encrypted message.</p>
+  <label>Paste Encrypted Data</label>
+  <br><br>
 
-        <button onclick="generateQR()">Generate QR Code</button>
+  <textarea id="cipherInput" placeholder="Paste QR scanned data here"></textarea>
 
-        <div id="qr"></div>
+  <button onclick="decryptMessage()">Decrypt Message</button>
 
-        <p class="status" id="qrStatus"></p>
-    </section>
+  <h3>Original Message</h3>
+  <div class="output" id="decryptedText">Result appears here</div>
 
-    <!-- MATRIX VISUALIZATION -->
-    <section class="card">
-        <h2>04. Matrix Visualization</h2>
+  <p class="status" id="decryptStatus"></p>
+</div>
 
-        <p class="matrix-title">Encryption Key Matrix (K)</p>
+<div class="card">
+  <h2>4. Matrix Key</h2>
 
-        <div class="matrix-area">
-            <div class="matrix">
-                3 &nbsp; 3<br>
-                2 &nbsp; 5
-            </div>
-        </div>
+  <div class="matrix">
+    Encryption Matrix K<br>
+    [ 3  3 ]<br>
+    [ 2  5 ]
+    <br><br>
+    Inverse Matrix K⁻¹<br>
+    [ 15  17 ]<br>
+    [ 20   9 ]
+  </div>
 
-        <p class="matrix-title">Inverse Key Matrix (K⁻¹)</p>
+  <p class="small">
+    A = 0, B = 1, C = 2 ... Z = 25.
+    This project uses the Hill Cipher algorithm.
+  </p>
+</div>
 
-        <div class="matrix-area">
-            <div class="matrix">
-                15 &nbsp; 17<br>
-                20 &nbsp; 9
-            </div>
-        </div>
-
-        <h2>Mathematical Calculation</h2>
-
-        <p>Encryption formula:</p>
-        <div class="output">
-            C = K × P (mod 26)
-        </div>
-
-        <p style="margin-top:15px">Decryption formula:</p>
-        <div class="output">
-            P = K⁻¹ × C (mod 26)
-        </div>
-
-        <h2 style="margin-top:20px">Calculation Details</h2>
-        <div id="calculation" class="output">
-            Encrypt a message to see the matrix calculations.
-        </div>
-    </section>
+<footer class="small">
+  MatrixGuard College Mini Project
+  <br>
+  Educational demonstration only. Not for real confidential messages.
+</footer>
 
 </div>
 
-<footer>
-    MatrixGuard | Educational Cyber Security Project
-    <br><br>
-    Built using HTML, CSS and JavaScript
-</footer>
-
 <script>
 
-// FIXED HILL CIPHER KEY MATRIX
-const K = [
-    [3, 3],
-    [2, 5]
-];
+let latestPayload = "";
 
-// INVERSE KEY MATRIX MODULO 26
-const K_INV = [
-    [15, 17],
-    [20, 9]
-];
-
-let lastEncrypted = "";
-
+// Convert letters to uppercase A-Z
 function cleanText(text) {
-    return text.toUpperCase().replace(/[^A-Z]/g, "");
+  return text.toUpperCase().replace(/[^A-Z]/g, "");
 }
 
-// Convert letter into number
-function letterToNumber(letter) {
-    return letter.charCodeAt(0) - 65;
-}
-
-// Convert number into letter
-function numberToLetter(number) {
-    return String.fromCharCode((number % 26) + 65);
-}
-
-// Matrix encryption
+// ENCRYPTION
 function encryptMessage() {
 
-    let original = cleanText(
-        document.getElementById("plainText").value
+  try {
+
+    let text = cleanText(
+      document.getElementById("plainText").value
     );
 
-    if (original.length === 0) {
-        alert("Please enter a valid message containing letters A-Z.");
-        return;
+    if (text.length === 0) {
+      throw new Error("Enter an English message.");
     }
 
-    let padded = original;
+    const originalLength = text.length;
 
-    // Add X if odd number of letters
-    if (padded.length % 2 !== 0) {
-        padded += "X";
+    // Add X if odd length
+    if (text.length % 2 !== 0) {
+      text += "X";
     }
 
-    let encrypted = "";
-    let details = "";
+    let result = "";
 
-    for (let i = 0; i < padded.length; i += 2) {
+    for (let i = 0; i < text.length; i += 2) {
 
-        let a = letterToNumber(padded[i]);
-        let b = letterToNumber(padded[i + 1]);
+      let a = text.charCodeAt(i) - 65;
+      let b = text.charCodeAt(i + 1) - 65;
 
-        let c1 = (K[0][0] * a + K[0][1] * b) % 26;
-        let c2 = (K[1][0] * a + K[1][1] * b) % 26;
+      let c1 = (3 * a + 3 * b) % 26;
+      let c2 = (2 * a + 5 * b) % 26;
 
-        encrypted += numberToLetter(c1);
-        encrypted += numberToLetter(c2);
+      result += String.fromCharCode(c1 + 65);
+      result += String.fromCharCode(c2 + 65);
 
-        details +=
-            padded[i] + padded[i+1] +
-            " → [" + a + ", " + b + "]" +
-            " → [" + c1 + ", " + c2 + "]" +
-            " → " + numberToLetter(c1) +
-            numberToLetter(c2) + "<br>";
     }
 
-    // Store original length to remove padding accurately
-    lastEncrypted = "MG1|" + original.length + "|" + encrypted;
+    latestPayload =
+      "MG1|" + originalLength + "|" + result;
 
-    document.getElementById("encryptedOutput").textContent =
-        lastEncrypted;
+    document.getElementById("encryptedText").innerText = result;
 
-    document.getElementById("cipherText").value =
-        lastEncrypted;
+    document.getElementById("cipherInput").value = latestPayload;
 
-    document.getElementById("calculation").innerHTML =
-        details;
+    document.getElementById("encryptStatus").innerText =
+      "Encryption successful!";
 
-    document.getElementById("encryptStatus").textContent =
-        "Encryption successful!";
+    document.getElementById("qrcode").innerHTML = "";
 
-    document.getElementById("qr").innerHTML = "";
-    document.getElementById("qrStatus").textContent = "";
+  }
+
+  catch(error) {
+    document.getElementById("encryptStatus").innerText =
+      error.message;
+  }
 }
 
-// Matrix decryption
+// QR GENERATION
+function generateQR() {
+
+  if (!latestPayload) {
+    alert("First encrypt your message!");
+    return;
+  }
+
+  const area = document.getElementById("qrcode");
+  area.innerHTML = "";
+
+  if (typeof QRCode === "undefined") {
+    alert("QR library unavailable. Check your internet connection.");
+    return;
+  }
+
+  new QRCode(area, {
+    text: latestPayload,
+    width: 200,
+    height: 200,
+    correctLevel: QRCode.CorrectLevel.M
+  });
+
+}
+
+// COPY ENCRYPTED MESSAGE
+async function copyMessage() {
+
+  if (!latestPayload) {
+    alert("First encrypt your message!");
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(latestPayload);
+    document.getElementById("encryptStatus").innerText =
+      "Encrypted data copied!";
+  } catch (error) {
+    document.getElementById("encryptStatus").innerText =
+      "Copy unavailable. Copy the data from the decryption box.";
+  }
+
+}
+
+// DECRYPTION
 function decryptMessage() {
 
-    let input = document.getElementById("cipherText")
-        .value.trim().toUpperCase();
+  try {
 
-    if (!input) {
-        alert("Please enter an encrypted message.");
-        return;
+    let payload =
+      document.getElementById("cipherInput").value.trim();
+
+    let parts = payload.split("|");
+
+    if (parts.length !== 3 || parts[0] !== "MG1") {
+      throw new Error("Invalid encrypted data format.");
     }
 
-    let originalLength = null;
-    let cipher = input;
+    let originalLength = Number(parts[1]);
+    let cipher = parts[2];
 
-    // Read MatrixGuard message format
-    if (input.startsWith("MG1|")) {
-
-        let parts = input.split("|");
-
-        if (parts.length !== 3 ||
-            !/^\d+$/.test(parts[1]) ||
-            !/^[A-Z]*$/.test(parts[2])) {
-
-            alert("Invalid encrypted message format.");
-            return;
-        }
-
-        originalLength = Number(parts[1]);
-        cipher = parts[2];
-
-        if (!Number.isSafeInteger(originalLength) ||
-            originalLength < 1 ||
-            cipher.length !== Math.ceil(originalLength / 2) * 2) {
-
-            alert("Invalid message length.");
-            return;
-        }
-
-    } else {
-
-        cipher = cleanText(input);
-
+    if (
+      !Number.isInteger(originalLength) ||
+      originalLength < 1 ||
+      originalLength > cipher.length
+    ) {
+      throw new Error("Invalid original message length.");
     }
 
-    if (cipher.length === 0 || cipher.length % 2 !== 0) {
-        alert("Ciphertext must contain an even number of letters.");
-        return;
+    if (!/^[A-Z]+$/.test(cipher) || cipher.length % 2 !== 0) {
+      throw new Error("Invalid encrypted letters.");
     }
 
-    let decrypted = "";
+    let result = "";
 
     for (let i = 0; i < cipher.length; i += 2) {
 
-        let a = letterToNumber(cipher[i]);
-        let b = letterToNumber(cipher[i + 1]);
+      let a = cipher.charCodeAt(i) - 65;
+      let b = cipher.charCodeAt(i + 1) - 65;
 
-        let p1 = (K_INV[0][0] * a +
-                  K_INV[0][1] * b) % 26;
+      let p1 = (15 * a + 17 * b) % 26;
+      let p2 = (20 * a + 9 * b) % 26;
 
-        let p2 = (K_INV[1][0] * a +
-                  K_INV[1][1] * b) % 26;
+      result += String.fromCharCode(p1 + 65);
+      result += String.fromCharCode(p2 + 65);
 
-        decrypted += numberToLetter(p1);
-        decrypted += numberToLetter(p2);
     }
 
-    if (originalLength !== null) {
-        decrypted = decrypted.slice(0, originalLength);
-    }
+    result = result.substring(0, originalLength);
 
-    document.getElementById("decryptedOutput").textContent =
-        decrypted;
+    document.getElementById("decryptedText").innerText = result;
 
-    document.getElementById("decryptStatus").textContent =
-        "Decryption successful!";
+    document.getElementById("decryptStatus").innerText =
+      "Decryption successful!";
+
+  }
+
+  catch(error) {
+
+    document.getElementById("decryptedText").innerText =
+      "Unable to decrypt";
+
+    document.getElementById("decryptStatus").innerText =
+      error.message;
+
+  }
+
 }
 
-// Copy encrypted message
-async function copyEncrypted() {
-
-    let text = document.getElementById("encryptedOutput")
-        .textContent;
-
-    if (!text || text === "Your encrypted message will appear here.") {
-        alert("Please encrypt a message first.");
-        return;
-    }
-
-    try {
-        await navigator.clipboard.writeText(text);
-        alert("Encrypted message copied successfully!");
-    } catch (error) {
-        alert("Copy unavailable. Please select and copy the message manually.");
-    }
-}
-
-// Generate QR code
-function generateQR() {
-
-    let message = document.getElementById("encryptedOutput")
-        .textContent;
-
-    if (!lastEncrypted || message !== lastEncrypted) {
-        alert("Please encrypt a message first.");
-        return;
-    }
-
-    if (typeof QRCode === "undefined") {
-        alert("QR library could not load. Check your internet connection.");
-        return;
-    }
-
-    document.getElementById("qr").innerHTML = "";
-
-    new QRCode(document.getElementById("qr"), {
-        text: lastEncrypted,
-        width: 200,
-        height: 200,
-        colorDark: "#000000",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.H
-    });
-
-    document.getElementById("qrStatus").textContent =
-        "QR Code generated successfully!";
-}
+// Initial demonstration
+encryptMessage();
 
 </script>
 
